@@ -77,45 +77,59 @@ const specialChars = [
 
 const numberChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
+const charPoolChoices = [
+  lowerCaseChars,
+  upperCaseChars,
+  numberChars,
+  specialChars,
+];
+
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-// Write password to the #password input
-function generatePassword() {
+function buildCharPool() {
   const charPool = [];
-
-  const charPoolChoices = [
-    lowerCaseChars,
-    upperCaseChars,
-    numberChars,
-    specialChars,
-  ];
-
-  const randomPassword = [];
-
-  for (let i = 0; i < charPoolChoices.length; i++) {
-    let userPrompt = confirm(
-      `would you like to include || ${charPoolChoices[i]} || in your password?`
-    );
-    if (userPrompt) {
-      for (let j = 0; j < charPoolChoices[i].length; j++) {
-        charPool.push(charPoolChoices[i][j]);
+  while (charPool.length < 1) {
+    for (let i = 0; i < charPoolChoices.length; i++) {
+      let userPrompt = confirm(
+        `would you like to include || ${charPoolChoices[i]} || in your password?`
+      );
+      if (userPrompt) {
+        for (let j = 0; j < charPoolChoices[i].length; j++) {
+          charPool.push(charPoolChoices[i][j]);
+        }
       }
     }
+    if (charPool.length < 1) {
+      alert('Please choose a set of characters to include');
+    }
   }
+  return charPool;
+}
 
-  const passwordLength = parseInt(
-    prompt('Please enter the chosen length of your password (between 8 - 128)')
+function getPasswordLength() {
+  let passwordLength = parseInt(
+    prompt('Please enter the length of your password (8-128 characters)')
   );
+  while (isNaN(passwordLength) || passwordLength < 8 || passwordLength > 128) {
+    passwordLength = parseInt(prompt('Please enter a number between 8-128'));
+  }
+  return passwordLength;
+}
+
+// Write password to the #password input
+function generatePassword() {
+  const charPool = buildCharPool();
+  const passwordLength = getPasswordLength();
+  const randomPassword = [];
 
   for (let i = 0; i < passwordLength; i++) {
     let randomInt = getRandomInt(charPool.length);
     randomPassword.push(charPool[randomInt]);
   }
 
-  const newPassword = randomPassword.join('');
-  return newPassword;
+  return randomPassword.join('');
 }
 
 function writePassword() {
