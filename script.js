@@ -84,6 +84,14 @@ const charPoolChoices = [
   specialChars,
 ];
 
+//for user prompt loop
+const charPoolNames = [
+  'lower case characters',
+  'upper case characters',
+  'numbers',
+  'special characters',
+];
+
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
@@ -93,7 +101,7 @@ function buildCharPool() {
   while (charPool.length < 1) {
     for (let i = 0; i < charPoolChoices.length; i++) {
       let userPrompt = confirm(
-        `would you like to include || ${charPoolChoices[i]} || in your password?`
+        `would you like to include ${charPoolNames[i]} in your password?`
       );
       if (userPrompt) {
         for (let j = 0; j < charPoolChoices[i].length; j++) {
@@ -122,6 +130,7 @@ function getPasswordLength() {
 function generatePassword() {
   const charPool = buildCharPool();
   const passwordLength = getPasswordLength();
+
   const randomPassword = [];
 
   for (let i = 0; i < passwordLength; i++) {
